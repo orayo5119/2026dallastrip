@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dallas Road Trip — Jun 29–Jul 2</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #ffffff;
+  color: #1a1a1a;
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─────────────────────────────────── */
+header {
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 24px 32px 18px;
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+header h1 { font-size: 1.25rem; font-weight: 700; color: #111; letter-spacing: -0.3px; }
+.header-meta { font-size: 0.78rem; color: #888; letter-spacing: 0.5px; }
+.header-badge {
+  margin-left: auto;
+  font-size: 0.72rem;
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  color: #666;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+/* ─── DAY TABS ───────────────────────────────── */
+.day-tabs {
+  display: flex;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+  padding: 0 32px;
+  gap: 0;
+  overflow-x: auto;
+}
+.day-tab {
+  padding: 14px 24px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  transition: all 0.15s;
+}
+.day-tab:hover { color: #666; }
+.day-tab.active { color: #111; border-bottom-color: #8a5f00; }
+
+/* ─── LAYOUT ─────────────────────────────────── */
+.day-panel { display: none; }
+.day-panel.active { display: flex; }
+
+.timeline-col {
+  width: 280px;
+  flex-shrink: 0;
+  border-right: 1px solid #e8e8ee;
+  background: #fafafa;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.options-col {
+  flex: 1;
+  padding: 32px 36px 60px;
+  overflow-y: auto;
+  max-width: 720px;
+}
+
+/* ─── TIMELINE ───────────────────────────────── */
+.timeline {
+  padding: 20px 0 40px;
+}
+
+.tl-stop {
+  display: flex;
+  cursor: pointer;
+  padding: 14px 20px 14px 24px;
+  gap: 14px;
+  align-items: flex-start;
+  border-left: 2px solid transparent;
+  transition: all 0.12s;
+  position: relative;
+}
+.tl-stop:hover { background: #f9f9f9; }
+.tl-stop.active {
+  background: #f9f9f9;
+  border-left-color: #8a5f00;
+}
+
+.tl-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #ccc;
+  border: 1.5px solid #ccc;
+  flex-shrink: 0;
+  margin-top: 5px;
+  transition: all 0.12s;
+}
+.tl-stop.active .tl-dot { background: #e8c460; border-color: #8a5f00; }
+.tl-stop.drive .tl-dot { background: transparent; border-color: #333; }
+
+.tl-content { flex: 1; min-width: 0; }
+.tl-time { font-size: 0.65rem; color: #666; letter-spacing: 0.8px; margin-bottom: 2px; font-weight: 600; }
+.tl-stop.active .tl-time { color: #8a5f00; }
+.tl-label { font-size: 0.82rem; font-weight: 600; color: #222; line-height: 1.3; }
+.tl-stop.active .tl-label { color: #111; }
+.tl-sublabel { font-size: 0.72rem; color: #999; margin-top: 2px; }
+.tl-stop.active .tl-sublabel { color: #888; }
+
+.tl-drive {
+  padding: 6px 20px 6px 26px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tl-drive-line {
+  width: 1px;
+  height: 22px;
+  background: #e0e0e0;
+  margin-left: 3px;
+  flex-shrink: 0;
+}
+.tl-drive-text {
+  font-size: 0.68rem;
+  color: #aaa;
+  letter-spacing: 0.2px;
+  background: #f7f7f7;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  padding: 2px 8px;
+}
+
+.tl-day-header {
+  padding: 20px 24px 8px;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #777;
+}
+
+/* ─── OPTIONS COLUMN ─────────────────────────── */
+.section-block { margin-bottom: 36px; }
+.section-block:first-child { margin-top: 0; }
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #e5e5e5;
+}
+.section-emoji { font-size: 1rem; }
+.section-title {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #888;
+}
+.section-count {
+  margin-left: auto;
+  font-size: 0.65rem;
+  color: #777;
+  letter-spacing: 0.3px;
+}
+
+/* highlight card */
+.highlight-card {
+  background: #fffef8;
+  border: 1px solid #e8d88022;
+  border-left: 3px solid #c89a10;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin-bottom: 32px;
+}
+.hl-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #a07820; margin-bottom: 6px; }
+.hl-title { font-size: 1.1rem; font-weight: 700; color: #111; margin-bottom: 8px; line-height: 1.3; }
+.hl-desc { font-size: 0.82rem; color: #555; line-height: 1.65; }
+
+/* route card */
+.route-card {
+  background: #f7f7fa;
+  border: 1px solid #e4e4ec;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.route-icon { font-size: 1.2rem; flex-shrink: 0; }
+.route-main { font-size: 0.88rem; font-weight: 600; color: #222; margin-bottom: 3px; }
+.route-detail { font-size: 0.75rem; color: #666; }
+.route-stops {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+.route-stop-pill {
+  background: #f5f5f5;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  padding: 3px 10px;
+  font-size: 0.67rem;
+  color: #888;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.route-stop-pill .arrow { color: #777; }
+
+/* option cards */
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.opt-card {
+  background: #f9f9f9;
+  border: 1px solid #e8e8ee;
+  border-radius: 9px;
+  padding: 15px 16px;
+  cursor: default;
+  transition: border-color 0.12s;
+  position: relative;
+}
+.opt-card:hover { border-color: #c8c8d8; }
+.opt-card.top { border-color: #d4a01733; }
+.opt-card.top:hover { border-color: #d4a01766; }
+
+.opt-badges { display: flex; gap: 5px; margin-bottom: 9px; flex-wrap: wrap; }
+.badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 2px 7px;
+  border-radius: 20px;
+}
+.badge.gold { background: #fffbee; color: #8a5f00; border: 1px solid #d4a01733; }
+.badge.green { background: #edf7f0; color: #2e7d4f; border: 1px solid #2e7d4f33; }
+.badge.pink { background: #fff0f4; color: #b03060; border: 1px solid #b0306033; }
+.badge.gray { background: #f5f5f5; color: #888; border: 1px solid #e0e0e0; }
+
+.opt-name { font-size: 0.88rem; font-weight: 700; color: #1a1a1a; margin-bottom: 3px; }
+.opt-sub { font-size: 0.72rem; color: #888; margin-bottom: 8px; }
+.opt-desc { font-size: 0.77rem; color: #555; line-height: 1.6; }
+.opt-tip {
+  margin-top: 10px;
+  padding-top: 9px;
+  border-top: 1px solid #eee;
+  font-size: 0.72rem;
+  color: #888;
+  font-style: italic;
+}
+
+/* note */
+.note {
+  background: #fffdf4;
+  border: 1px solid #f0e8cc;
+  border-left: 3px solid #c89a10;
+  border-radius: 8px;
+  padding: 11px 15px;
+  font-size: 0.78rem;
+  color: #666;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+.note strong { color: #9a7010; }
+
+
+
+/* ─── MOBILE-FIRST RESPONSIVE ────────────────── */
+
+/* On mobile: stack vertically — timeline on top as horizontal strip */
+@media (max-width: 768px) {
+  body { font-size: 15px; }
+
+  header {
+    padding: 16px 16px 12px;
+    flex-wrap: wrap;
+    gap: 6px;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: #ffffff;
+  }
+  header h1 { font-size: 1.1rem; }
+  .header-meta { font-size: 0.72rem; width: 100%; }
+  .header-badge { font-size: 0.68rem; margin-left: 0; }
+
+  .day-tabs {
+    padding: 0 8px;
+    -webkit-overflow-scrolling: touch;
+    position: sticky;
+    top: var(--tabs-top, 0px);
+    z-index: 199;
+    background: #ffffff;
+  }
+  .day-tab { padding: 12px 14px; font-size: 0.72rem; }
+
+  /* Day panel: vertical stack on mobile */
+  .day-panel.active { flex-direction: column; }
+
+  /* Timeline becomes horizontal scrollable strip — sticky at top */
+  .timeline-col {
+    width: 100%;
+    height: auto;
+    position: sticky;
+    top: var(--tl-top, 0px);
+    z-index: 100;
+    border-right: none;
+    border-bottom: 1px solid #e8e8ee;
+    background: #fafafa;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    /* Hide scrollbar but keep scrollability */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .timeline-col::-webkit-scrollbar { display: none; }
+
+  .timeline {
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+    min-width: max-content;
+    align-items: stretch;
+  }
+
+  .tl-day-header { display: none; }
+
+  /* Timeline stops become horizontal chips */
+  .tl-stop {
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 14px 10px;
+    border-left: none;
+    border-bottom: 3px solid transparent;
+    min-width: 80px;
+    text-align: center;
+    gap: 4px;
+  }
+  .tl-stop.active {
+    border-left: none;
+    border-bottom: 3px solid #c89a10;
+    background: #fffef8;
+  }
+  .tl-stop:hover { background: #f5f5f5; }
+
+  .tl-dot { display: none; }
+
+  .tl-time {
+    font-size: 0.6rem;
+    letter-spacing: 0.3px;
+  }
+  .tl-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+  }
+  .tl-sublabel { display: none; }
+
+  /* Drive connectors become small arrows between stops */
+  .tl-drive {
+    padding: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 32px;
+  }
+  .tl-drive-line {
+    width: 20px;
+    height: 1px;
+    background: #ddd;
+    margin: 0;
+  }
+  .tl-drive-text {
+    display: block;
+    font-size: 0.6rem;
+    color: #aaa;
+    white-space: nowrap;
+    text-align: center;
+  }
+  .tl-drive {
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    min-width: 48px;
+    padding: 4px 4px;
+  }
+  .tl-drive-line {
+    width: 16px;
+    height: 1px;
+    margin: 0;
+  }
+
+  /* Options column: full width, natural scroll with page */
+  .options-col {
+    padding: 20px 16px 80px;
+    overflow-y: visible;
+    overflow-x: hidden;
+    max-width: 100%;
+    /* Ensure content flows below sticky strips */
+  }
+
+  /* Cards: full width single column on mobile */
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .opt-card { padding: 14px 14px; }
+  .opt-name { font-size: 0.92rem; }
+  .opt-desc { font-size: 0.82rem; }
+
+  .highlight-card { padding: 16px 16px; margin-bottom: 20px; }
+  .hl-title { font-size: 1rem; }
+
+  .route-card { flex-direction: column; gap: 10px; padding: 14px 14px; }
+
+  .section-header { margin-bottom: 12px; padding-bottom: 8px; }
+  .section-block { margin-bottom: 28px; }
+
+  .note { font-size: 0.8rem; padding: 10px 12px; }
+}
+
+/* On desktop: keep original side-by-side layout */
+@media (min-width: 769px) {
+  .day-panel.active { flex-direction: row; height: calc(100vh - 100px); }
+
+  .timeline-col {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 100%;
+  }
+
+  .options-col {
+    overflow-y: auto;
+    height: 100%;
+  }
+}
+
+/* ─── PLACE LINKS ───────────────────────────── */
+a.place-link {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1.5px solid #d4a01766;
+  padding-bottom: 1px;
+  transition: border-color 0.15s, color 0.15s;
+}
+a.place-link:hover {
+  color: #8a5f00;
+  border-bottom-color: #8a5f00;
+}
+/* In timeline labels */
+.tl-label a.place-link {
+  border-bottom: 1px dashed #ccc;
+}
+.tl-stop.active .tl-label a.place-link {
+  color: #111;
+  border-bottom-color: #c89a1088;
+}
+
+/* ─── OPTION NUMBERS ─────────────────────────── */
+.opt-number {
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #bbb;
+  margin-bottom: 5px;
+}
+.opt-card.top .opt-number {
+  color: #c89a10;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🐾 Dallas Road Trip</h1>
+  <span class="header-meta">Jun 29 – Jul 2, 2025 &nbsp;·&nbsp; Rogers AR → Dallas TX &nbsp;·&nbsp; 2 adults + dog</span>
+  <span class="header-badge">~5 hrs each way</span>
+</header>
+
+<div class="day-tabs">
+  <div class="day-tab active"   onclick="showDay(0)">Day 1 &nbsp;Sun Jun 29</div>
+  <div class="day-tab"          onclick="showDay(1)">Day 2 &nbsp;Mon Jun 30</div>
+  <div class="day-tab"          onclick="showDay(2)">Day 3 &nbsp;Tue Jul 1</div>
+  <div class="day-tab"          onclick="showDay(3)">Day 4 &nbsp;Wed Jul 2</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     DAY 1
+═════════════════════════════════════════════ -->
+<div class="day-panel active" id="day-0">
+
+  <div class="timeline-col">
+    <div class="timeline">
+      <div class="tl-day-header">Sunday Jun 29 · Drive Day</div>
+
+      <div class="tl-stop active" data-target="d0-s1" id="tl-d0-s1">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">10:30 AM</div>
+          <div class="tl-label">Texarkana</div>
+          <div class="tl-sublabel">State line + Bringle Lake</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~30 min</div></div>
+
+      <div class="tl-stop" data-target="d0-s2" id="tl-d0-s2">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">11:30 AM</div>
+          <div class="tl-label">Lunch in Texarkana</div>
+          <div class="tl-sublabel">3 options</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~2.5 hrs</div></div>
+
+      <div class="tl-stop" data-target="d0-s3" id="tl-d0-s3">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">2:30 PM</div>
+          <div class="tl-label">Arrive Deep Ellum</div>
+          <div class="tl-sublabel">Check in + afternoon spots</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚶 5 min walk</div></div>
+
+      <div class="tl-stop" data-target="d0-s4" id="tl-d0-s4">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">4:30 PM</div>
+          <div class="tl-label">Happy Hour</div>
+          <div class="tl-sublabel">Deep Ellum breweries</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 5–10 min</div></div>
+
+      <div class="tl-stop" data-target="d0-s5" id="tl-d0-s5">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">7:00 PM</div>
+          <div class="tl-label">Dinner</div>
+          <div class="tl-sublabel">Vietnamese · BBQ</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="options-col">
+
+    <div class="route-card">
+      <div class="route-icon">🛣️</div>
+      <div>
+        <div class="route-main">Rogers → Texarkana → Dallas</div>
+        <div class="route-detail">~5 hrs driving · Depart 8am · Arrive ~2:30pm</div>
+        <div class="route-stops">
+          <div class="route-stop-pill">Rogers AR <span class="arrow">→</span></div>
+          <div class="route-stop-pill">I-49 S <span class="arrow">→</span></div>
+          <div class="route-stop-pill">Texarkana <span class="arrow">→</span></div>
+          <div class="route-stop-pill">I-30 W <span class="arrow">→</span></div>
+          <div class="route-stop-pill">Deep Ellum, Dallas</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BREAKFAST -->
+    <div class="section-block" id="d0-s1">
+      <div class="section-header">
+        <span class="section-emoji">📍</span>
+        <span class="section-title">Texarkana Stop — 10:30 AM (~1 hr)</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">Must Do</span><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Texas+State+Line+Texarkana+TX&query_place_id=ChIJQbYieotpNIYRrh24yD_hLAM" target="_blank" rel="noopener" class="place-link">Texas State Line</a></div>
+          <div class="opt-sub">State Line Ave · Free · Always open</div>
+          <div class="opt-desc">The state line runs down the middle of the street and through the Federal Building — the only U.S. courthouse shared between two states. Straddle TX and AR with the pup for the photo.</div>
+          <div class="opt-tip">15–20 min stop. Park right on State Line Ave.</div>
+        </div>
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.8★</span><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Bringle+Lake+Park+East+Texarkana+TX&query_place_id=ChIJH6PXPVtCNIYRphSoLm6ttfg" target="_blank" rel="noopener" class="place-link">Bringle Lake Park</a></div>
+          <div class="opt-sub">15 min north · Open 7am–10pm</div>
+          <div class="opt-desc">Gorgeous lakefront park with trails and hidden fairy doors in the trees. Best dog walk stretch of the whole trip. Let the pup run before 2.5 more hours in the car.</div>
+          <div class="opt-tip">30-min walk. Bring water — July heat!</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Quick Look</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Perot+Theatre+Texarkana+TX&query_place_id=ChIJgW8SzV5qNIYRjhWALajUu40" target="_blank" rel="noopener" class="place-link">Perot Theatre</a></div>
+          <div class="opt-sub">221 Main St · Historic exterior</div>
+          <div class="opt-desc">Beautiful 100-year-old restored theatre in downtown Texarkana. Worth a walk-by on the way to/from the state line. Tours available weekdays 10am–5pm.</div>
+          <div class="opt-tip">10-min exterior stop. Free to admire.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LUNCH -->
+    <div class="section-block" id="d0-s2">
+      <div class="section-header">
+        <span class="section-emoji">🌮</span>
+        <span class="section-title">Lunch — Texarkana or On the Road · 11:30 AM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">Local Institution</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Bryce%27s+Cafeteria+Texarkana+TX" target="_blank" rel="noopener" class="place-link">Bryce's Cafeteria</a></div>
+          <div class="opt-sub">Texarkana · Since 1931</div>
+          <div class="opt-desc">Southern comfort food cafeteria-style — fried chicken, mac and cheese, cornbread. A Texarkana landmark since 1931. Fast, filling, and fun road trip energy.</div>
+          <div class="opt-tip">Very fast service. Perfect if timing is tight.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gold">Texas Classic</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Whataburger+Sulphur+Springs+TX" target="_blank" rel="noopener" class="place-link">Whataburger</a></div>
+          <div class="opt-sub">I-30 corridor · Texas icon</div>
+          <div class="opt-desc">If you've never had Whataburger, this is the move — it's a genuine Texas institution. Honey BBQ Chicken Strip sandwich is the order. Order at one on the I-30 corridor.</div>
+          <div class="opt-tip">Drive-through keeps you moving. Perfect road food.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Skip & Roll</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name">Buc-ee's + Snacks</div>
+          <div class="opt-sub">Mt. Pleasant · ~1 hr east of Dallas</div>
+          <div class="opt-desc">The legendary Texas travel stop — massive, immaculate restrooms, beaver nuggets, brisket sandwiches, and a gas station that feels like a theme park. Worth the detour just to say you went.</div>
+          <div class="opt-tip">Mt. Pleasant Buc-ee's is the closest one on I-30.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTERNOON -->
+    <div class="section-block" id="d0-s3">
+      <div class="section-header">
+        <span class="section-emoji">🎨</span>
+        <span class="section-title">Afternoon — Deep Ellum Arrival · 2:30 PM</span>
+        <span class="section-count">4 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name">Deep Ellum Mural Walk</div>
+          <div class="opt-sub">Main St & Commerce St · Free</div>
+          <div class="opt-desc">Dozens of massive building-sized murals lining the streets. Walk Main, Commerce, and Elm with the pup right after checking in. The perfect arrival ritual — stretch legs, feel the city.</div>
+          <div class="opt-tip">Best photo light: 4–6pm golden hour.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Backyard+Dallas+Deep+Ellum+TX" target="_blank" rel="noopener" class="place-link">Backyard Dallas</a></div>
+          <div class="opt-sub">Deep Ellum · 12,000 sq ft outdoor bar</div>
+          <div class="opt-desc">Giant dog-friendly outdoor venue with picnic tables, yard games, swings, multiple bars. Great arrival decompression spot with a cold beer right after the drive.</div>
+          <div class="opt-tip">Leashed dogs always welcome. Climate-controlled too.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Deep+Ellum+Art+Company+Dallas+TX" target="_blank" rel="noopener" class="place-link">Deep Ellum Art Company</a></div>
+          <div class="opt-sub">Local gallery + outdoor spaces</div>
+          <div class="opt-desc">Multi-space arts venue with rotating local artist showcases, outdoor areas, and pop-up markets. Good intro to Dallas's creative scene on arrival afternoon.</div>
+          <div class="opt-tip">Check their calendar — often has weekend events.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Smart Move</span></div>
+          <div class="opt-number">Option 4</div><div class="opt-name">Check In & Rest</div>
+          <div class="opt-sub">Hotel · Rest the pup</div>
+          <div class="opt-desc">Drop bags, let the dog settle, freshen up. 2–4pm is peak Texas heat (100°F+). Totally valid to rest 30–60 min before the evening ramps up.</div>
+          <div class="opt-tip">Walking distance hotel in Deep Ellum makes everything easier.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HAPPY HOUR -->
+    <div class="section-block" id="d0-s4">
+      <div class="section-header">
+        <span class="section-emoji">🍺</span>
+        <span class="section-title">Happy Hour · 4:30 PM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.6★ · 980 reviews</span><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Deep+Ellum+Brewing+Company+Taproom+Dallas+TX&query_place_id=ChIJobqGd-iYToYRN-pNfajA7nU" target="_blank" rel="noopener" class="place-link">Deep Ellum Brewing Co.</a></div>
+          <div class="opt-sub">Right in Deep Ellum · Walkable</div>
+          <div class="opt-desc">The neighborhood brewery — games, food, large patio. Dallas Blonde or the Comfort barrel-aged ale are the standouts. Natural first-night spot.</div>
+          <div class="opt-tip">Huge nachos. Order early before the kitchen gets busy.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Dots+Hop+House+Deep+Ellum+Dallas+TX" target="_blank" rel="noopener" class="place-link">Dot's Hop House</a></div>
+          <div class="opt-sub">Deep Ellum · 50+ taps</div>
+          <div class="opt-desc">Beloved Deep Ellum bar with an enormous rotating tap list and a relaxed dog-friendly patio. Low-key first-night beer without the brewery-tour energy.</div>
+          <div class="opt-tip">Great for craft beer nerds — ask what's new on tap.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Local Vibe</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=AllGood+Cafe+2934+Main+St+Dallas+TX" target="_blank" rel="noopener" class="place-link">AllGood Cafe</a></div>
+          <div class="opt-sub">Deep Ellum · Bar + live music</div>
+          <div class="opt-desc">Deep Ellum's beloved all-day bar. Cold beer, Texas vibe, local musicians warming up for the night. Great arrival energy with a no-pretense crowd.</div>
+          <div class="opt-tip">Live music most evenings from 7pm.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DINNER -->
+    <div class="section-block" id="d0-s5">
+      <div class="section-header">
+        <span class="section-emoji">🍜</span>
+        <span class="section-title">Dinner · 7:00 PM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="note"><strong>⚠️ Note:</strong> Papaya Kitchen is closed Sundays. If arriving Sunday, go to Bếp Nhà instead — it's open 7 days.</div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.9★ Best Pho in Dallas</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Papaya+Kitchen+5200+Lemmon+Ave+Dallas+TX&query_place_id=ChIJ3b7vXgCfToYRmOaHEBcIRVQ" target="_blank" rel="noopener" class="place-link">Papaya Kitchen</a></div>
+          <div class="opt-sub">Vietnamese · Closes 9pm · Mon–Sat only</div>
+          <div class="opt-desc">Owner Alan runs the room personally, explains the authentic way to eat pho. Rich broth, fresh herbs, incredible flavors. One of the best meals of the trip.</div>
+          <div class="opt-tip">Order #16 beef noodle soup + Vietnamese iced coffee.</div>
+        </div>
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.6★ Open Sunday</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Bep+Nha+Viet+Kitchen+9780+Walnut+St+Dallas+TX&query_place_id=ChIJdSAmhHQfTIYR3yBKYtFLvG4" target="_blank" rel="noopener" class="place-link">Bếp Nhà Viet Kitchen</a></div>
+          <div class="opt-sub">Vietnamese · Open 7 days</div>
+          <div class="opt-desc">Sunday arrival go-to. Crispy chicken rice (Cơm Gà Xối Mỡ), shaken beef, pho. Complimentary weekend dessert. Generous portions, great service.</div>
+          <div class="opt-tip">Best Sunday alternative to Papaya Kitchen.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK · Patio</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Terry+Blacks+BBQ+3025+Main+St+Dallas+TX" target="_blank" rel="noopener" class="place-link">Terry Black's BBQ</a></div>
+          <div class="opt-sub">Deep Ellum · Central Texas BBQ</div>
+          <div class="opt-desc">Legendary Central Texas-style brisket, ribs, and sausage. Dog-friendly shaded patio, staff refill water bowls for pups. A great first-night Dallas classic.</div>
+          <div class="opt-tip">Arrive by 5:30pm — line builds fast after 6pm.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     DAY 2
+═════════════════════════════════════════════ -->
+<div class="day-panel" id="day-1">
+
+  <div class="timeline-col">
+    <div class="timeline">
+      <div class="tl-day-header">Monday Jun 30 · Full Dallas Day</div>
+
+      <div class="tl-stop active" data-target="d1-s0" id="tl-d1-s0">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">8:30 AM</div>
+          <div class="tl-label">Breakfast</div>
+          <div class="tl-sublabel">Bishop Arts area</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 5 min</div></div>
+
+      <div class="tl-stop" data-target="d1-s1" id="tl-d1-s1">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">10:00 AM</div>
+          <div class="tl-label">Bishop Arts Shopping</div>
+          <div class="tl-sublabel">Decor · Art · Design gifts</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚶 5 min</div></div>
+
+      <div class="tl-stop" data-target="d1-s2" id="tl-d1-s2">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">12:30 PM</div>
+          <div class="tl-label">Lunch</div>
+          <div class="tl-sublabel">Bishop Arts patios</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~10 min</div></div>
+
+      <div class="tl-stop" data-target="d1-s3" id="tl-d1-s3">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">2:30 PM</div>
+          <div class="tl-label">Katy Trail + Afternoon</div>
+          <div class="tl-sublabel">Dog walk · Beat the heat</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 5 min</div></div>
+
+      <div class="tl-stop" data-target="d1-s4" id="tl-d1-s4">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">5:00 PM</div>
+          <div class="tl-label">Happy Hour</div>
+          <div class="tl-sublabel">Katy Trail Ice House or Peticolas</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~10 min</div></div>
+
+      <div class="tl-stop" data-target="d1-s5" id="tl-d1-s5">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">8:00 PM</div>
+          <div class="tl-label">Dinner</div>
+          <div class="tl-sublabel">Japanese · Splurge night</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="options-col">
+
+    <div class="highlight-card">
+      <div class="hl-label">⭐ Today's Highlight</div>
+      <div class="hl-title">Bishop Arts District — Home Decor, Art & Design Shopping</div>
+      <div class="hl-desc">Dallas's most walkable neighborhood for exactly what you love: indie home decor boutiques, artisan gift shops, design galleries, and great coffee. Afternoon on the Katy Trail with the pup, then the craft brewery and splurge Japanese dinner.</div>
+    </div>
+
+    <div class="note"><strong>⚠️ Monday:</strong> Noble Coyote Coffee is closed Mondays. Use Eiland or Cultivar today — save Noble Coyote for Tuesday morning.</div>
+
+    <!-- BREAKFAST -->
+    <div class="section-block" id="d1-s0">
+      <div class="section-header">
+        <span class="section-emoji">☕</span>
+        <span class="section-title">Breakfast · 8:30 AM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">Bishop Arts Best</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Encina+614+W+Davis+St+Dallas+TX" target="_blank" rel="noopener" class="place-link">Encina</a></div>
+          <div class="opt-sub">Bishop Arts · Blue corn pancakes</div>
+          <div class="opt-desc">The city's most iconic Bishop Arts brunch. Blue corn pancakes with cajeta drizzle — so famous the mix is now sold at H-E-B. Worth every wait.</div>
+          <div class="opt-tip">Arrive early. Gets very busy on weekends.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Tribal+All+Day+Cafe+Bishop+Arts+Dallas+TX" target="_blank" rel="noopener" class="place-link">Tribal All Day Cafe</a></div>
+          <div class="opt-sub">Bishop Arts · Healthy bowls + juice</div>
+          <div class="opt-desc">Fresh build-your-own bowls and smoothies. Dog-friendly and right in Bishop Arts — start shopping right after breakfast. Light but satisfying.</div>
+          <div class="opt-tip">Great lighter option before a big shopping morning.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Bold Roast</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Eiland+Coffee+Roasters+Dallas+TX" target="_blank" rel="noopener" class="place-link">Eiland Coffee Roasters</a></div>
+          <div class="opt-sub">Oak Cliff · Best bold roast · Mon sub</div>
+          <div class="opt-desc">Monday's Noble Coyote substitute. Beloved Dallas roaster with a rich, bold cup. Grab coffee + pastry before hitting Bishop Arts.</div>
+          <div class="opt-tip">Get a bag of beans to take home.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MORNING SHOPPING -->
+    <div class="section-block" id="d1-s1">
+      <div class="section-header">
+        <span class="section-emoji">🛍️</span>
+        <span class="section-title">Morning — Bishop Arts Shopping · 10:00 AM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">★★★★★ Top Pick</span><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Magic+Hour+Bishop+Ave+Dallas+TX" target="_blank" rel="noopener" class="place-link">Magic Hour</a></div>
+          <div class="opt-sub">Bishop Ave · Artisanal gifts + home decor</div>
+          <div class="opt-desc">Light and airy design boutique on Bishop Ave. Artisanal gifts, home decor, jewelry, unique finds. One of the most curated gift shops in the district.</div>
+          <div class="opt-tip">Don't skip the back room — best stuff is there.</div>
+        </div>
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">150+ Women Artists</span><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Mosaic+Makers+Collective+401+N+Bishop+Ave+Dallas+TX" target="_blank" rel="noopener" class="place-link">Mosaic Makers Collective</a></div>
+          <div class="opt-sub">401 N Bishop · Handmade goods</div>
+          <div class="opt-desc">Collective representing 150+ women makers. Handmade jewelry, art, and decor — all local. Industrial-chic space. Completely unique finds you won't see anywhere else.</div>
+          <div class="opt-tip">New items rotate constantly. Great for one-of-a-kind gifts.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Houss+on+Bishop+Dallas+TX" target="_blank" rel="noopener" class="place-link">Home on Bishop + Houss on Bishop</a></div>
+          <div class="opt-sub">N Bishop Ave · Home decor · Steps apart</div>
+          <div class="opt-desc">Two great home decor stores side by side. Home on Bishop for accessible lifestyle finds; Houss on Bishop for artfully designed furniture pieces. Do both — combine into one stop.</div>
+          <div class="opt-tip">Also check Tyler Kingston Mercantile nearby.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LUNCH -->
+    <div class="section-block" id="d1-s2">
+      <div class="section-header">
+        <span class="section-emoji">🥗</span>
+        <span class="section-title">Lunch · 12:30 PM — Bishop Arts</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK · Shaded Patio</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Blue+Dahlia+Bistro+Dallas+TX" target="_blank" rel="noopener" class="place-link">Blue Dahlia Bistro</a></div>
+          <div class="opt-sub">Bishop Arts · European bistro</div>
+          <div class="opt-desc">Beloved Bishop Arts staple with a lush shaded patio. European-inspired sandwiches, quiches, and salads. Perfect mid-shopping lunch. Dog-friendly, relaxed pace.</div>
+          <div class="opt-tip">Order the croque monsieur or salmon crepes.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Wine + Pasta</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Paradiso+Bishop+Arts+Dallas+TX" target="_blank" rel="noopener" class="place-link">Paradiso</a></div>
+          <div class="opt-sub">Bishop Arts · Mediterranean courtyard</div>
+          <div class="opt-desc">Charming European courtyard patio next to Emporium Pies. Hand-made pastas, wood-fired pizzas, great cocktails. Feels like you've been transported to Italy.</div>
+          <div class="opt-tip">Great for a leisurely lunch with a glass of wine.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Taco+y+Vino+Bishop+Arts+Dallas+TX" target="_blank" rel="noopener" class="place-link">Taco y Vino</a></div>
+          <div class="opt-sub">Bishop Arts · Mexican · Open every day</div>
+          <div class="opt-desc">Mexican brunch menu served 7 days a week. Great for vegetarians. Monday mimosas for $10. Casual, fun, dog-friendly patio.</div>
+          <div class="opt-tip">$10 Monday mimosas — weekday deal.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTERNOON -->
+    <div class="section-block" id="d1-s3">
+      <div class="section-header">
+        <span class="section-emoji">🌿</span>
+        <span class="section-title">Afternoon · 2:30 PM — Katy Trail Area</span>
+        <span class="section-count">4 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK · Best Walk</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Katy+Trail+Dallas+TX" target="_blank" rel="noopener" class="place-link">Katy Trail</a></div>
+          <div class="opt-sub">3.5-mile paved trail · Uptown</div>
+          <div class="opt-desc">Dallas's most popular urban trail. Flat, paved, tree-lined. Walk as much as you want — leads directly to the Katy Trail Ice House at the south end. The pup will love this.</div>
+          <div class="opt-tip">Go after 4pm for less heat. Bring water for the dog.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Off-leash Dog Run</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Klyde+Warren+Park+2012+Woodall+Rodgers+Fwy+Dallas+TX" target="_blank" rel="noopener" class="place-link">Klyde Warren Park</a></div>
+          <div class="opt-sub">Downtown · Off-leash dog park</div>
+          <div class="opt-desc">Beautifully designed deck park over a freeway. Fenced off-leash dog run, lawn games, food trucks, often live music. Great pup-socializing spot.</div>
+          <div class="opt-tip">Off-leash dog park is fenced. Best in late afternoon.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Dallas+Farmers+Market+920+S+Harwood+St+Dallas+TX" target="_blank" rel="noopener" class="place-link">Dallas Farmers Market</a></div>
+          <div class="opt-sub">Downtown · Artisan vendors</div>
+          <div class="opt-desc">Mosaic Makers Collective has a second location here. Local honey, fresh produce, handisan food vendors. Bonus shopping if Bishop Arts didn't satisfy.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Smart Move</span></div>
+          <div class="opt-number">Option 4</div><div class="opt-name">Hotel Rest Hour</div>
+          <div class="opt-sub">2–4pm · Beat 100°F heat</div>
+          <div class="opt-desc">Peak heat hits 1–4pm in Dallas July (100–105°F heat index). Pool, AC, and a short neighborhood walk for the dog. Save energy for the evening splurge dinner.</div>
+          <div class="opt-tip">This is genuinely the smart call. Recharge for Uchi.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HAPPY HOUR -->
+    <div class="section-block" id="d1-s4">
+      <div class="section-header">
+        <span class="section-emoji">🍺</span>
+        <span class="section-title">Happy Hour · 5:00 PM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.2★ · 3,800+ reviews</span><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Katy+Trail+Ice+House+3127+Routh+St+Dallas+TX&query_place_id=ChIJGb1hmzOZToYRmvLlo9hgmu8" target="_blank" rel="noopener" class="place-link">Katy Trail Ice House</a></div>
+          <div class="opt-sub">Right off the trail · Huge patio</div>
+          <div class="opt-desc">The classic move after the trail walk — massive dog-friendly patio, fire pits, cold margaritas, great burgers. Dallas's most iconic patio bar experience. Flows straight from the trail walk.</div>
+          <div class="opt-tip">Go before 5:30pm for a good patio spot.</div>
+        </div>
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.8★ · Brewery of the Year</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Peticolas+Brewing+Company+1301+Pace+St+Dallas+TX&query_place_id=ChIJ5d4kWlGZToYRe_NkGx5ggGo" target="_blank" rel="noopener" class="place-link">Peticolas Brewing</a></div>
+          <div class="opt-sub">Design District · Open Mon from noon</div>
+          <div class="opt-desc">One of Dallas's most respected craft breweries. Multi-level taproom, ping pong, shuffleboard, food trucks outside. Do a flight of beers — staff will guide you through them.</div>
+          <div class="opt-tip">Try Velvet Hammer or Don't Think It Won't Happen.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Enos+Pizza+Tavern+407+N+Bishop+Ave+Dallas+TX" target="_blank" rel="noopener" class="place-link">Eno's Pizza Tavern</a></div>
+          <div class="opt-sub">Bishop Arts · Stay in the neighborhood</div>
+          <div class="opt-desc">Bishop Arts staple with craft beer, wood-fired pizza, dog-friendly patio. Great if you want to stay in Bishop Arts instead of driving to Uptown for happy hour.</div>
+          <div class="opt-tip">Farm-to-table ingredients. Great happy hour specials.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DINNER -->
+    <div class="section-block" id="d1-s5">
+      <div class="section-header">
+        <span class="section-emoji">🍣</span>
+        <span class="section-title">Dinner · 8:00 PM — Splurge Night</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge pink">Splurge</span><span class="badge gold">4.7★ · 2,700+ reviews</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Uchi+Dallas+2817+Maple+Ave+Dallas+TX&query_place_id=ChIJ7dWaEzGZToYRb3Mp_plp0AY" target="_blank" rel="noopener" class="place-link">Uchi Dallas</a></div>
+          <div class="opt-sub">Japanese · Uptown · Opens 4pm</div>
+          <div class="opt-desc">The best Japanese restaurant in Dallas. Innovative sushi and small plates. Do the Somakase — staff curates the whole meal around your preferences. Every dish is stunning.</div>
+          <div class="opt-tip">Reserve on Resy now. Opens 4pm. Worth every penny.</div>
+        </div>
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.9★ Omakase</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=KAWA+Omakase+Handroll+Bar+5940+Royal+Ln+Dallas+TX&query_place_id=ChIJwRgW9b4hTIYR9tcR3MekouM" target="_blank" rel="noopener" class="place-link">KAWA Omakase Handroll Bar</a></div>
+          <div class="opt-sub">Japanese · Royal Ln · Intimate counter</div>
+          <div class="opt-desc">Dallas's sleeper-hit omakase. Chef's counter, dry-aged fish, handrolls with extraordinary precision. Reviewers call it the best in the city. Reservation required.</div>
+          <div class="opt-tip">Ask for fresh wasabi grated from the actual root.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gold">4.9★</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Papaya+Kitchen+5200+Lemmon+Ave+Dallas+TX&query_place_id=ChIJ3b7vXgCfToYRmOaHEBcIRVQ" target="_blank" rel="noopener" class="place-link">Papaya Kitchen</a></div>
+          <div class="opt-sub">Vietnamese · Open Mon–Sat · Closes 9pm</div>
+          <div class="opt-desc">If you skipped it Day 1 (arrived Sunday), tonight is the night. Outstanding pho, owner Alan runs the room warmly. One of the best meals of the whole trip.</div>
+          <div class="opt-tip">Try the Hu Tiêu Áp Chảo (stir-fried flat rice noodles) too.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     DAY 3
+═════════════════════════════════════════════ -->
+<div class="day-panel" id="day-2">
+
+  <div class="timeline-col">
+    <div class="timeline">
+      <div class="tl-day-header">Tuesday Jul 1 · Full Dallas Day</div>
+
+      <div class="tl-stop active" data-target="d2-s0" id="tl-d2-s0">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">9:00 AM</div>
+          <div class="tl-label">Breakfast</div>
+          <div class="tl-sublabel">Noble Coyote open today!</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~10 min</div></div>
+
+      <div class="tl-stop" data-target="d2-s1" id="tl-d2-s1">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">10:30 AM</div>
+          <div class="tl-label">Design District</div>
+          <div class="tl-sublabel">Galleries · Showrooms · Shops</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚶 5 min</div></div>
+
+      <div class="tl-stop" data-target="d2-s2" id="tl-d2-s2">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">1:00 PM</div>
+          <div class="tl-label">Lunch</div>
+          <div class="tl-sublabel">Design District options</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 5–10 min</div></div>
+
+      <div class="tl-stop" data-target="d2-s3" id="tl-d2-s3">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">3:00 PM</div>
+          <div class="tl-label">Afternoon</div>
+          <div class="tl-sublabel">Museum · Park · Cool down</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~15 min</div></div>
+
+      <div class="tl-stop" data-target="d2-s4" id="tl-d2-s4">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">5:30 PM</div>
+          <div class="tl-label">Happy Hour</div>
+          <div class="tl-sublabel">Vector Brewing ← best night</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~20 min</div></div>
+
+      <div class="tl-stop" data-target="d2-s5" id="tl-d2-s5">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">7:30 PM</div>
+          <div class="tl-label">Dinner</div>
+          <div class="tl-sublabel">Korean BBQ Night</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="options-col">
+
+    <div class="highlight-card">
+      <div class="hl-label">⭐ Today's Highlight</div>
+      <div class="hl-title">Noble Coyote + Dallas Design District + Korean BBQ</div>
+      <div class="hl-desc">Tuesday means Noble Coyote is finally open — the best roaster in Dallas. Then the Design District: galleries, showrooms, and the most design-forward shopping in the city. Vector Brewing for happy hour (closed Mon, perfect tonight), then KBBQ for dinner.</div>
+    </div>
+
+    <!-- BREAKFAST -->
+    <div class="section-block" id="d2-s0">
+      <div class="section-header">
+        <span class="section-emoji">☕</span>
+        <span class="section-title">Breakfast · 9:00 AM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.8★ Best in Dallas</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Noble+Coyote+Coffee+Roasters+Dallas+TX&query_place_id=ChIJCzN1KiihToYRQXBpRUJg8Sc" target="_blank" rel="noopener" class="place-link">Noble Coyote Coffee</a></div>
+          <div class="opt-sub">Deep Ellum · Tue–Sat 9am–3pm only</div>
+          <div class="opt-desc">The roaster you've been waiting for since Monday. In-house roasting, light-forward and vibrant cups with notes of peach, jasmine, and citrus. The best espresso in Dallas — no debate.</div>
+          <div class="opt-tip">Buy a bag of beans to take home. Order the cappuccino.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=The+Biscuit+Bar+Deep+Ellum+Dallas+TX" target="_blank" rel="noopener" class="place-link">The Biscuit Bar</a></div>
+          <div class="opt-sub">Deep Ellum · Opens 8am · Dog patio</div>
+          <div class="opt-desc">Build-your-own biscuit sandwiches with every topping imaginable. Dog-friendly patio. Fun, casual, and uniquely Dallas. Great grab-and-go before the Design District.</div>
+          <div class="opt-tip">Opens 8am — get there early to beat the line.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Classic Dallas</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=AllGood+Cafe+2934+Main+St+Dallas+TX" target="_blank" rel="noopener" class="place-link">AllGood Cafe</a></div>
+          <div class="opt-sub">Deep Ellum · All-day breakfast</div>
+          <div class="opt-desc">Deep Ellum's beloved diner. Chicken-fried steak breakfast, South Austin migas, Tex-Mex breakfast tacos, pancakes. Comfortable and unpretentious neighborhood classic.</div>
+          <div class="opt-tip">Very filling — skip if you want room for a big lunch.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MORNING -->
+    <div class="section-block" id="d2-s1">
+      <div class="section-header">
+        <span class="section-emoji">🏛️</span>
+        <span class="section-title">Morning — Design District · 10:30 AM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">Best in District</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Neighborhood+design+shop+Dallas+Design+District+TX" target="_blank" rel="noopener" class="place-link">Neighborhood (Design Shop)</a></div>
+          <div class="opt-sub">Design District · Artisanal home goods</div>
+          <div class="opt-desc">The best single shop in the Design District. Oaxacan ceramics, textiles, candles, incense, books, lamps — carefully curated from local and international artists. Genuinely special.</div>
+          <div class="opt-tip">Also has an online shop if you can't carry everything.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Antiques + Showroom</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Mecox+Dallas+TX" target="_blank" rel="noopener" class="place-link">Mecox Dallas</a></div>
+          <div class="opt-sub">Design District · European antiques</div>
+          <div class="opt-desc">Antique furniture, European finds, and decorative accessories. High-end but very browsable. Great for inspiration even if not buying. Distinctive pieces you won't find elsewhere.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Rotating Inventory</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Davis+Street+Mercantile+Dallas+TX" target="_blank" rel="noopener" class="place-link">Davis Street Mercantile</a></div>
+          <div class="opt-sub">Design District · Eclectic decor</div>
+          <div class="opt-desc">Owners bring in fresh rotating inventory of home decor, furniture, and gifts. Good prices, great variety. The kind of shop you browse for an hour and always find something.</div>
+          <div class="opt-tip">Combine all three into a walkable Design District morning loop.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LUNCH -->
+    <div class="section-block" id="d2-s2">
+      <div class="section-header">
+        <span class="section-emoji">🌮</span>
+        <span class="section-title">Lunch · 1:00 PM — Design District</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span><span class="badge gold">Best Vibes</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Ascension+Coffee+1621+Oak+Lawn+Ave+Dallas+TX" target="_blank" rel="noopener" class="place-link">Ascension Coffee</a></div>
+          <div class="opt-sub">Design District · Café + full menu all day</div>
+          <div class="opt-desc">Great roaster AND food. Bacon egg & cheese brekky croissant, smoked turkey club, Aperol spritz at lunch. Design District staple that covers breakfast through happy hour beautifully.</div>
+          <div class="opt-tip">Get the croissant sandwich. Great spot to decompress mid-day.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK · Live Music</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Community+Beer+Co+3110+Commonwealth+Dr+Dallas+TX" target="_blank" rel="noopener" class="place-link">Community Beer Co.</a></div>
+          <div class="opt-sub">Design District · Dog patio · Trivia Tues</div>
+          <div class="opt-desc">Massive dog-friendly patio, live music, trivia leagues. Grab a Mosaic IPA and a Kuby's bratwurst. Fun midday stop before the afternoon heat sets in. Tuesday = trivia night!</div>
+          <div class="opt-tip">Trivia on Tuesdays — might catch part of it at lunch.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Elevated Comfort</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Culinary+Dropout+Dallas+TX" target="_blank" rel="noopener" class="place-link">Culinary Dropout</a></div>
+          <div class="opt-sub">Design District · Rooftop + patio</div>
+          <div class="opt-desc">Rooftop + patio combo with fun elevated comfort food. Pretzel bites with provolone fondue, crab California rolls, Detroit-style pizza. Great cocktails at lunch.</div>
+          <div class="opt-tip">Pretzel bites + fried chicken are the must-orders.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AFTERNOON -->
+    <div class="section-block" id="d2-s3">
+      <div class="section-header">
+        <span class="section-emoji">☀️</span>
+        <span class="section-title">Afternoon · 3:00 PM</span>
+        <span class="section-count">4 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">Free Admission</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Dallas+Museum+of+Art+1717+N+Harwood+St+Dallas+TX" target="_blank" rel="noopener" class="place-link">Dallas Museum of Art</a></div>
+          <div class="opt-sub">Arts District · Free general admission</div>
+          <div class="opt-desc">World-class museum with free admission — Impressionist, African, Asian, and contemporary collections. Best indoor escape from the afternoon heat. Closed Mondays (you're here Tuesday ✓).</div>
+          <div class="opt-tip">Take turns going in shifts so the pup isn't left too long.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Ferris+Wheelers+1950+Market+Center+Blvd+Dallas+TX" target="_blank" rel="noopener" class="place-link">Ferriswheelers</a></div>
+          <div class="opt-sub">Design District · Outdoor BBQ + Ferris wheel</div>
+          <div class="opt-desc">Full-size Ferris wheel, picnic tables, Texas BBQ, string lights. Dog-friendly and genuinely wild in the best way. A uniquely Dallas afternoon scene worth at least one drink.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Off-leash</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Klyde+Warren+Park+2012+Woodall+Rodgers+Fwy+Dallas+TX" target="_blank" rel="noopener" class="place-link">Klyde Warren Park</a></div>
+          <div class="opt-sub">Downtown · Off-leash dog park</div>
+          <div class="opt-desc">If the pup hasn't been to the off-leash dog park yet, this is the afternoon for it. Food trucks, green space, often free outdoor events on Tuesdays.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Practical</span></div>
+          <div class="opt-number">Option 4</div><div class="opt-name">Hotel Rest + Pack</div>
+          <div class="opt-sub">3–5pm · Save energy for KBBQ</div>
+          <div class="opt-desc">Rest hour in the AC before the Korean BBQ feast. Maybe start packing too — checkout is tomorrow morning. Smart use of the brutal 3–5pm heat window.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HAPPY HOUR -->
+    <div class="section-block" id="d2-s4">
+      <div class="section-header">
+        <span class="section-emoji">🍺</span>
+        <span class="section-title">Happy Hour · 5:30 PM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.6★ · 2023 TX Brewery of Year</span><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Vector+Brewing+Pizza+Coffee+Dallas+TX&query_place_id=ChIJJYFduXWhToYRkUctPnM8vys" target="_blank" rel="noopener" class="place-link">Vector Brewing</a></div>
+          <div class="opt-sub">Lake Highlands · Closed Mon — Tue is the night</div>
+          <div class="opt-desc">Texas Craft Brewers Brewery of the Year 2023. Craft beer + wood-fired pizza + coffee. Laid-back dog-friendly patio, games, excellent IPAs. Tonight is the only night it works — go.</div>
+          <div class="opt-tip">Figures of Light IPA. Get a Fine Swine pizza too.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Design District Stay</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name">Cultivar Coffee + Aperitivo</div>
+          <div class="opt-sub">Design District · Coffee → evening transition</div>
+          <div class="opt-desc">Top Dallas specialty roaster. Good pre-dinner stop if you want a coffee or early evening drink before heading to Korean BBQ at 7:30pm.</div>
+          <div class="opt-tip">Perfect 5pm stop. 20 min, then head to KBBQ.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Goodfriend+Beer+Garden+1154+Peavy+Rd+Dallas+TX" target="_blank" rel="noopener" class="place-link">Goodfriend Beer Garden</a></div>
+          <div class="opt-sub">East Dallas · Dog-friendly garden</div>
+          <div class="opt-desc">Beautiful East Dallas beer garden with some of the best burgers in the city. Genuinely welcoming to pups. Relaxed neighborhood energy for a pre-KBBQ drink.</div>
+          <div class="opt-tip">Order a burger even if just having one beer.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DINNER -->
+    <div class="section-block" id="d2-s5">
+      <div class="section-header">
+        <span class="section-emoji">🥩</span>
+        <span class="section-title">Dinner · 7:30 PM — Korean BBQ Night</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.7★ · Top Pick</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Firepan+Korean+BBQ+2534+Royal+Ln+Dallas+TX&query_place_id=ChIJE597Ba4nTIYRtcTl4tA3QZM" target="_blank" rel="noopener" class="place-link">Firepan Korean BBQ & Bar</a></div>
+          <div class="opt-sub">Royal Ln · Open until 11pm</div>
+          <div class="opt-desc">Staff walk first-timers through every detail — which sauces, how to wrap, what order to grill. Great meat quality and fun atmosphere. Set menu ends with kimchi fried rice + ramen.</div>
+          <div class="opt-tip">Order the pork jowl and brisket combo.</div>
+        </div>
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.8★ · Authentic Style</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Don+Sarang+Korean+BBQ+2630+Old+Denton+Rd+Carrollton+TX&query_place_id=ChIJyxPmsjIlTIYRQQjup223ykM" target="_blank" rel="noopener" class="place-link">Don Sarang Korean BBQ</a></div>
+          <div class="opt-sub">Carrollton · 30 min · Cast iron grill</div>
+          <div class="opt-desc">Traditional cast iron pot lid KBBQ — kimchi and bean sprouts grilled directly on the grill. More authentic and less common style. Exceptional pork jowl. Worth the drive for serious KBBQ fans.</div>
+          <div class="opt-tip">Call ahead — can get busy even on weeknights.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Local Favorite</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Ssahm+Korean+BBQ+Dallas+TX" target="_blank" rel="noopener" class="place-link">Ssahm Korean BBQ</a></div>
+          <div class="opt-sub">Dallas Koreatown · Lively · Neighborhood</div>
+          <div class="opt-desc">Dallas's Koreatown gem — authentic KBBQ, lively atmosphere, excellent banchan spread. More neighborhood feel than the bigger spots. A real local favorite.</div>
+          <div class="opt-tip">More neighborhood feel. Great banchan selection.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     DAY 4
+═════════════════════════════════════════════ -->
+<div class="day-panel" id="day-3">
+
+  <div class="timeline-col">
+    <div class="timeline">
+      <div class="tl-day-header">Wednesday Jul 2 · Drive Home</div>
+
+      <div class="tl-stop active" data-target="d3-s0" id="tl-d3-s0">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">8:30 AM</div>
+          <div class="tl-label">Breakfast</div>
+          <div class="tl-sublabel">Last Dallas coffee</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚶 5–10 min</div></div>
+
+      <div class="tl-stop" data-target="d3-s1" id="tl-d3-s1">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">9:30 AM</div>
+          <div class="tl-label">Last Dallas Stops</div>
+          <div class="tl-sublabel">Farmers Market · Bishop Arts</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🧳 ~30 min</div></div>
+
+      <div class="tl-stop" data-target="d3-s2" id="tl-d3-s2">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">11:00 AM</div>
+          <div class="tl-label">Depart Dallas</div>
+          <div class="tl-sublabel">I-30 E toward Rogers</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~1.5 hrs</div></div>
+
+      <div class="tl-stop" data-target="d3-s3" id="tl-d3-s3">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">12:30 PM</div>
+          <div class="tl-label">Lunch + Sulphur Springs</div>
+          <div class="tl-sublabel">Antique Mall · Stretch stop</div>
+        </div>
+      </div>
+
+      <div class="tl-drive"><div class="tl-drive-line"></div><div class="tl-drive-text">🚗 ~2.5 hrs</div></div>
+
+      <div class="tl-stop" data-target="d3-s4" id="tl-d3-s4">
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-time">5:00 PM</div>
+          <div class="tl-label">🏡 Home in Rogers</div>
+          <div class="tl-sublabel">Welcome back!</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="options-col">
+
+    <div class="route-card">
+      <div class="route-icon">🛣️</div>
+      <div>
+        <div class="route-main">Dallas → Sulphur Springs → Rogers</div>
+        <div class="route-detail">~5 hrs total · Depart 11am · Home by 5pm</div>
+        <div class="route-stops">
+          <div class="route-stop-pill">Dallas TX <span class="arrow">→</span></div>
+          <div class="route-stop-pill">I-30 E <span class="arrow">→</span></div>
+          <div class="route-stop-pill">Sulphur Springs <span class="arrow">→</span></div>
+          <div class="route-stop-pill">I-30 E → I-49 N <span class="arrow">→</span></div>
+          <div class="route-stop-pill">Rogers AR 🏡</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-card">
+      <div class="hl-label">⭐ Today's Highlight</div>
+      <div class="hl-title">Dallas Farmers Market Send-Off + Sulphur Springs Antiques</div>
+      <div class="hl-desc">Leisurely Dallas morning — final coffee, Farmers Market browse — then depart by 11am. The Sulphur Springs antique stop you saved from Day 1 hits perfectly ~1.5 hrs out. Home in Rogers by 5pm.</div>
+    </div>
+
+    <!-- BREAKFAST -->
+    <div class="section-block" id="d3-s0">
+      <div class="section-header">
+        <span class="section-emoji">☕</span>
+        <span class="section-title">Breakfast · 8:30 AM — Final Dallas Coffee</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">Bold + Beloved</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Eiland+Coffee+Roasters+Dallas+TX" target="_blank" rel="noopener" class="place-link">Eiland Coffee Roasters</a></div>
+          <div class="opt-sub">Oak Cliff · Best bold roast in Dallas</div>
+          <div class="opt-desc">Perfect last-morning Dallas coffee. Rich, bold, loved by locals for years. Grab a bag of beans to take home — you'll be thinking about this cup for weeks.</div>
+          <div class="opt-tip">Bag of beans = best souvenir of the trip.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Light Roast</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Cultivar+Coffee+Roasters+2025+E+Irving+Blvd+Dallas+TX" target="_blank" rel="noopener" class="place-link">Cultivar Coffee Roasters</a></div>
+          <div class="opt-sub">Design District · Specialty roaster</div>
+          <div class="opt-desc">If you preferred Noble Coyote's lighter style — this is your Wednesday equivalent. Precise, nuanced cups from one of Dallas's top specialty roasters.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Bread+Winners+Cafe+3301+McKinney+Ave+Dallas+TX" target="_blank" rel="noopener" class="place-link">Bread Winners Cafe</a></div>
+          <div class="opt-sub">Uptown · Dog patio · Full brunch</div>
+          <div class="opt-desc">A proper sit-down farewell breakfast. French Ham Benedict, Farmhouse Scramble, legendary cinnamon rolls. Dallas brunch institution for 3 decades. Dog-friendly Uptown patio.</div>
+          <div class="opt-tip">Start with a cinnamon roll for the table. Non-negotiable.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAST DALLAS STOPS -->
+    <div class="section-block" id="d3-s1">
+      <div class="section-header">
+        <span class="section-emoji">🛒</span>
+        <span class="section-title">Last Dallas Stops · 9:30 AM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span><span class="badge gold">Best Send-Off</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Dallas+Farmers+Market+920+S+Harwood+St+Dallas+TX" target="_blank" rel="noopener" class="place-link">Dallas Farmers Market</a></div>
+          <div class="opt-sub">Downtown · Open daily from 9am</div>
+          <div class="opt-desc">Mosaic Makers Collective has a location here. Local honey, fresh produce, artisan vendors, and breakfast tacos at El Mero Mero. Dog-friendly outdoor market. Perfect last Dallas memory.</div>
+          <div class="opt-tip">Go by 9:30am for best vendor selection before they sell out.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge green">🐾 Dog OK</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name">Quick Bishop Arts Loop</div>
+          <div class="opt-sub">30 min · If you missed anything Mon</div>
+          <div class="opt-desc">Anything you passed on Day 2 — a candle, a piece of art, something from Magic Hour — grab it now. Most shops open 10–11am. Worth a quick pass if there's something specific.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">Practical</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name">Hotel Check-Out + Dog Walk</div>
+          <div class="opt-sub">Before hitting the road</div>
+          <div class="opt-desc">Give the pup a proper morning walk before 5 hours in the car. Load everything up, check out, then hit the Farmers Market or go straight to I-30 E.</div>
+          <div class="opt-tip">Pack frozen water bottle for the dog. Long drive ahead.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DEPART / LUNCH -->
+    <div class="section-block" id="d3-s2">
+      <div class="section-header">
+        <span class="section-emoji">🚗</span>
+        <span class="section-title">Depart Dallas · 11:00 AM — I-30 East</span>
+        <span class="section-count">Route</span>
+      </div>
+      <div class="route-card" style="margin-bottom:0">
+        <div class="route-icon">🛣️</div>
+        <div>
+          <div class="route-main">Dallas → Sulphur Springs → Rogers</div>
+          <div class="route-detail">Depart 11am · Sulphur Springs ~12:30pm · Home ~5pm</div>
+          <div class="route-stops">
+            <div class="route-stop-pill">I-30 E from Dallas <span class="arrow">→</span></div>
+            <div class="route-stop-pill">~1.5 hrs <span class="arrow">→</span></div>
+            <div class="route-stop-pill">Sulphur Springs exit <span class="arrow">→</span></div>
+            <div class="route-stop-pill">~2.5 hrs <span class="arrow">→</span></div>
+            <div class="route-stop-pill">Rogers AR</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LUNCH -->
+    <div class="section-block" id="d3-s3">
+      <div class="section-header">
+        <span class="section-emoji">🥗</span>
+        <span class="section-title">Lunch + Sulphur Springs Stop · 12:30 PM</span>
+        <span class="section-count">3 options</span>
+      </div>
+      <div class="options-grid">
+        <div class="opt-card top">
+          <div class="opt-badges"><span class="badge gold">4.3★ Saved from Day 1</span></div>
+          <div class="opt-number">Option 1</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Town+Square+Antique+Mall+102+College+St+Sulphur+Springs+TX&query_place_id=ChIJDfhLmSswSoYRUiNiMudOpko" target="_blank" rel="noopener" class="place-link">Town Square Antique Mall</a></div>
+          <div class="opt-sub">102 College St · Tue–Sat 10am–5pm</div>
+          <div class="opt-desc">The antique stop you saved from the drive down. Americana, vintage furniture, old signs, and decor at good prices. Owners are friendly and happy to negotiate. Allow 45 min.</div>
+          <div class="opt-tip">Often has 50% off items. Ask before assuming full price.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gold">Texas Classic</span></div>
+          <div class="opt-number">Option 2</div><div class="opt-name"><a href="https://www.google.com/maps/search/?api=1&query=Whataburger+Sulphur+Springs+TX" target="_blank" rel="noopener" class="place-link">Whataburger</a></div>
+          <div class="opt-sub">I-30 corridor near Sulphur Springs</div>
+          <div class="opt-desc">Last chance for Whataburger before crossing back into Arkansas. Honey BBQ Chicken Strip sandwich or the #1 with jalapeños. Perfect road lunch — drive-through keeps you moving.</div>
+          <div class="opt-tip">Get it here, eat at the antique mall parking lot with the dog.</div>
+        </div>
+        <div class="opt-card">
+          <div class="opt-badges"><span class="badge gray">From Farmers Market</span></div>
+          <div class="opt-number">Option 3</div><div class="opt-name">Packed Picnic</div>
+          <div class="opt-sub">Made at Dallas Farmers Market</div>
+          <div class="opt-desc">Grab takeout from the Farmers Market before leaving Dallas — sandwiches, snacks, fresh fruit. Eat at a rest stop with the dog. Zero wait, great food.</div>
+          <div class="opt-tip">Best option if you want to minimize stops and get home early.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- HOME -->
+    <div class="section-block" id="d3-s4">
+      <div class="section-header">
+        <span class="section-emoji">🏡</span>
+        <span class="section-title">Home in Rogers · ~5:00 PM</span>
+        <span class="section-count"></span>
+      </div>
+      <div class="note" style="border-left-color:#2e7d4f; border-color:#e0f0e8 #e0f0e8 #e0f0e8 #2e7d4f;">
+        <strong style="color:#2e7d4f">🎉 Welcome home!</strong> No happy hour or dinner planned — you're back in Rogers by 5pm. Grab NWA takeout on the way in if you're hungry. The dog deserves a big bowl of water and a nap. Until next trip! 🐾
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const isMobile = () => window.innerWidth <= 768;
+
+// Set sticky offset for timeline strip (below header + day-tabs)
+function updateStickyTop() {
+  if (!isMobile()) return;
+  const h = document.querySelector('header')?.offsetHeight || 0;
+  const t = document.querySelector('.day-tabs')?.offsetHeight || 0;
+  // day-tabs sticks below header
+  document.documentElement.style.setProperty('--tabs-top', h + 'px');
+  // timeline sticks below header + tabs
+  document.documentElement.style.setProperty('--tl-top', (h + t) + 'px');
+}
+updateStickyTop();
+window.addEventListener('resize', updateStickyTop);
+
+// ── Day tab switching ──────────────────────────
+function showDay(i) {
+  document.querySelectorAll('.day-panel').forEach((p,j) => p.classList.toggle('active', i===j));
+  document.querySelectorAll('.day-tab').forEach((t,j) => t.classList.toggle('active', i===j));
+  document.querySelectorAll('.tl-stop').forEach(s => s.classList.remove('active'));
+  const firstStop = document.querySelector(`#day-${i} .tl-stop`);
+  if (firstStop) firstStop.classList.add('active');
+  // scroll back to top on day switch
+  if (isMobile()) window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── Timeline stop click → scroll to section ───
+function scrollToSection(targetId, stopEl) {
+  const panel = stopEl.closest('.day-panel');
+
+  // Highlight clicked stop
+  panel.querySelectorAll('.tl-stop').forEach(s => s.classList.remove('active'));
+  stopEl.classList.add('active');
+
+  const target = document.getElementById(targetId);
+  if (!target) return;
+
+  if (isMobile()) {
+    // On mobile: page scroll (layout is vertical)
+    const headerH = document.querySelector('header').offsetHeight +
+                    document.querySelector('.day-tabs').offsetHeight;
+    const tlH = panel.querySelector('.timeline-col')?.offsetHeight || 0;
+    const totalSticky = headerH + tlH + 12;
+    const offset = target.getBoundingClientRect().top + window.scrollY - totalSticky;
+    window.scrollTo({ top: offset, behavior: 'smooth' });
+
+    // Also scroll the timeline strip to keep active chip visible
+    const tlCol = panel.querySelector('.timeline-col');
+    if (tlCol) {
+      const chipLeft = stopEl.offsetLeft - (tlCol.offsetWidth / 2) + (stopEl.offsetWidth / 2);
+      tlCol.scrollTo({ left: chipLeft, behavior: 'smooth' });
+    }
+  } else {
+    // On desktop: scroll the options-col panel
+    const col = target.closest('.options-col');
+    if (col) col.scrollTo({ top: target.offsetTop - 20, behavior: 'smooth' });
+  }
+}
+
+// Attach click listeners to all timeline stops
+document.querySelectorAll('.tl-stop').forEach(stop => {
+  stop.addEventListener('click', function(e) {
+    // Extract targetId from onclick attr (e.g. data-target="d0-s1")
+    const targetId = this.dataset.target;
+    if (targetId) scrollToSection(targetId, this);
+  });
+});
+
+// ── Auto-highlight timeline stop while scrolling ──
+function getActiveSectionId(panel) {
+  const sections = panel.querySelectorAll('.section-block[id]');
+  let current = null;
+  const stickyTop = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--tl-top') || '0');
+  const tlH2 = isMobile() ? (panel.querySelector('.timeline-col')?.offsetHeight || 0) : 0;
+  const threshold = isMobile() ? (stickyTop + tlH2 + 20) : 200;
+  sections.forEach(sec => {
+    const rect = sec.getBoundingClientRect();
+    if (rect.top <= threshold) current = sec.id;
+  });
+  return current;
+}
+
+function updateTimelineHighlight(panel, sectionId) {
+  if (!sectionId) return;
+  const tlId = 'tl-' + sectionId;
+  panel.querySelectorAll('.tl-stop').forEach(s => s.classList.remove('active'));
+  const tl = document.getElementById(tlId);
+  if (tl) {
+    tl.classList.add('active');
+    // On mobile, scroll the horizontal strip to keep it visible
+    if (isMobile()) {
+      const tlCol = panel.querySelector('.timeline-col');
+      if (tlCol) {
+        const chipLeft = tl.offsetLeft - (tlCol.offsetWidth / 2) + (tl.offsetWidth / 2);
+        tlCol.scrollTo({ left: chipLeft, behavior: 'smooth' });
+      }
+    }
+  }
+}
+
+// Desktop: listen on each options-col scroll
+document.querySelectorAll('.options-col').forEach(col => {
+  col.addEventListener('scroll', function() {
+    if (isMobile()) return;
+    const panel = this.closest('.day-panel');
+    const id = getActiveSectionId(panel);
+    updateTimelineHighlight(panel, id);
+  });
+});
+
+// Mobile: listen on window scroll
+let scrollTimer;
+window.addEventListener('scroll', function() {
+  if (!isMobile()) return;
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(() => {
+    const panel = document.querySelector('.day-panel.active');
+    if (!panel) return;
+    const id = getActiveSectionId(panel);
+    updateTimelineHighlight(panel, id);
+  }, 50);
+}, { passive: true });
+</script>
+</body>
+</html>
