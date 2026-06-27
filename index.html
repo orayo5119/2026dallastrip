@@ -498,6 +498,42 @@ a.place-link:hover {
 .opt-card.top .opt-number {
   color: #c89a10;
 }
+
+/* ─── OPTION CHECKBOXES ──────────────────────── */
+.opt-check {
+  position: absolute;
+  top: 11px;
+  right: 11px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s, background 0.15s;
+  flex-shrink: 0;
+  z-index: 2;
+}
+.opt-check:hover { border-color: #2e7d4f; }
+.opt-check.checked {
+  background: #2e7d4f;
+  border-color: #2e7d4f;
+}
+.opt-check.checked::after {
+  content: '✓';
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+.opt-card.selected {
+  border-color: #2e7d4f !important;
+  background: #f4fbf6;
+}
+.opt-card.selected .opt-number { color: #2e7d4f; }
 </style>
 </head>
 <body>
@@ -1725,6 +1761,38 @@ window.addEventListener('scroll', function() {
     updateTimelineHighlight(panel, id);
   }, 50);
 }, { passive: true });
+
+// ── Option card checkboxes (persisted via localStorage) ──
+function initCheckboxes() {
+  document.querySelectorAll('.opt-card').forEach(card => {
+    const panel   = card.closest('.day-panel');
+    const section = card.closest('.section-block');
+    const dayId   = panel   ? panel.id   : 'day-x';
+    const secId   = section ? section.id : 'sec';
+    const cards   = section ? section.querySelectorAll('.opt-card') : [card];
+    const idx     = Array.from(cards).indexOf(card);
+    const key     = `pick:${dayId}:${secId}:${idx}`;
+
+    const btn = document.createElement('div');
+    btn.className = 'opt-check';
+    btn.title = 'Mark as my pick';
+
+    if (localStorage.getItem(key) === '1') {
+      btn.classList.add('checked');
+      card.classList.add('selected');
+    }
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const on = btn.classList.toggle('checked');
+      card.classList.toggle('selected', on);
+      localStorage.setItem(key, on ? '1' : '0');
+    });
+
+    card.appendChild(btn);
+  });
+}
+initCheckboxes();
 </script>
 </body>
 </html>
