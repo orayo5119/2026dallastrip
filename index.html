@@ -1762,22 +1762,66 @@ window.addEventListener('scroll', function() {
   }, 50);
 }, { passive: true });
 
-// ── Option card checkboxes (persisted via localStorage) ──
+// ── Option card checkboxes — synced across devices via Firebase ──
+// To enable: create a free Firebase project at https://console.firebase.google.com
+//   1. New project → Realtime Database → Create database → Start in test mode
+//   2. Copy the database URL (e.g. https://my-trip-xxxxx-rtdb.firebaseio.com)
+//   3. Paste it below replacing PASTE_YOUR_FIREBASE_DATABASE_URL_HERE
+const FIREBASE_URL = 'PASTE_YOUR_FIREBASE_DATABASE_URL_HERE';
+const DB_PATH      = `${FIREBASE_URL}/dallas2026/selections.json`;
+const USE_FIREBASE = FIREBASE_URL !== 'PASTE_YOUR_FIREBASE_DATABASE_URL_HERE';
+
+let remoteSelections = {};
+
+function cardKey(card) {
+  const panel   = card.closest('.day-panel');
+  const section = card.closest('.section-block');
+  const dayId   = panel   ? panel.id   : 'day-x';
+  const secId   = section ? section.id : 'sec';
+  const cards   = section ? section.querySelectorAll('.opt-card') : [card];
+  const idx     = Array.from(cards).indexOf(card);
+  return `${dayId}__${secId}__${idx}`;
+}
+
+function applySelections(data) {
+  document.querySelectorAll('.opt-card').forEach(card => {
+    const key = cardKey(card);
+    const on  = !!(data && data[key]);
+    const btn = card.querySelector('.opt-check');
+    if (btn) btn.classList.toggle('checked', on);
+    card.classList.toggle('selected', on);
+  });
+}
+
+async function loadFromFirebase() {
+  try {
+    const res = await fetch(DB_PATH);
+    const data = res.ok ? await res.json() : null;
+    remoteSelections = data || {};
+    applySelections(remoteSelections);
+  } catch(e) {}
+}
+
+async function saveToFirebase(key, on) {
+  remoteSelections[key] = on;
+  try {
+    await fetch(DB_PATH, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(remoteSelections)
+    });
+  } catch(e) {}
+}
+
 function initCheckboxes() {
   document.querySelectorAll('.opt-card').forEach(card => {
-    const panel   = card.closest('.day-panel');
-    const section = card.closest('.section-block');
-    const dayId   = panel   ? panel.id   : 'day-x';
-    const secId   = section ? section.id : 'sec';
-    const cards   = section ? section.querySelectorAll('.opt-card') : [card];
-    const idx     = Array.from(cards).indexOf(card);
-    const key     = `pick:${dayId}:${secId}:${idx}`;
-
+    const key = cardKey(card);
     const btn = document.createElement('div');
     btn.className = 'opt-check';
     btn.title = 'Mark as my pick';
 
-    if (localStorage.getItem(key) === '1') {
+    // Restore from localStorage as immediate fallback
+    if (!USE_FIREBASE && localStorage.getItem(key) === '1') {
       btn.classList.add('checked');
       card.classList.add('selected');
     }
@@ -1786,11 +1830,21 @@ function initCheckboxes() {
       e.stopPropagation();
       const on = btn.classList.toggle('checked');
       card.classList.toggle('selected', on);
-      localStorage.setItem(key, on ? '1' : '0');
+      if (USE_FIREBASE) {
+        saveToFirebase(key, on);
+      } else {
+        localStorage.setItem(key, on ? '1' : '0');
+      }
     });
 
     card.appendChild(btn);
   });
+
+  if (USE_FIREBASE) {
+    loadFromFirebase();
+    // Poll every 5 seconds so all devices stay in sync
+    setInterval(loadFromFirebase, 5000);
+  }
 }
 initCheckboxes();
 </script>
